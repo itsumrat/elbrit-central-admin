@@ -1,0 +1,32 @@
+span.close-btn {
+    visibility: hidden;
+}
+span.close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #3e67eb;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+    filter: drop-shadow(2px 4px 6px grey);
+    cursor:pointer;
+  
+}
+.msnImagebox {
+    position: relative;
+}
+.msnImagebox>img {
+    margin: 7px;
+    border: 2px solid #99c2ff;
+  max-width:150px;
+    width:100%;
+}
+.msnImagebox {
+    position: relative;
+    display: block;
+    padding-right: 30px;
+}
