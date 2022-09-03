@@ -23,12 +23,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('employee-info/{mobile_no}', [EmployeeController::class, 'employeeInfo']);
 Route::get('walls', [HomeController::class, 'getPosts']);
+
+Route::post('updateToken', [HomeController::class, 'updateToken']);
+
 Route::get('walls/{employee_id}', [HomeController::class, 'getPostsByEmployee']);
 Route::get('prices', [HomeController::class, 'getPrices']);
 Route::get('prices/{team_id}', [HomeController::class, 'getPricesByTeam']);
 Route::get('products', [HomeController::class, 'getProducts']);
 Route::get('products/{team_id}', [HomeController::class, 'getProductsByTeam']);
 
-
-Route::get('/notify/{employee_id}', [HomeController::class, 'sendnotify'])->name('notify');
-
+Route::get('notify/{employee_id}', [HomeController::class, 'sendnotify']);
