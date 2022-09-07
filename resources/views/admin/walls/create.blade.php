@@ -158,10 +158,10 @@
     $(document).ready(function() {
 
       CKEDITOR.replace('details', {
-    toolbar: [
-        ['Cut', 'Copy','Paste','PasteText','PasteFromWord','-','Textarea','Undo','Redo','-','Bold', 'Italic', 'Underline', 'Strike', 'TextColor', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink','Indent','Outdent','Blockquote','Styles','Format']
-    ]
-});
+          toolbar: [
+              ['Cut', 'Copy','Paste','PasteText','PasteFromWord','-','Textarea','Undo','Redo','-','Bold', 'Italic', 'Underline', 'Strike', 'TextColor', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink','Indent','Outdent','Blockquote','Styles','Format']
+          ]
+      });
     });
 
 

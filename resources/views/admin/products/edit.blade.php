@@ -75,43 +75,43 @@
                             <div class="form-group row">
                                 <label for="inputLabelClaim" class="col-sm-3">Label Claim</label>
                                 <div class="col-sm-9">
-                                  <input type="text" id="inputLabelClaim" name="label_claim" value="{{$product->label_claim}}" class="form-control">
+                                  <input type="text" id="inputLabelClaim" name="label_claim" value="{{$product->label_claim}}" class="ckd form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputToP" class="col-sm-3">Type of Product</label>
                               <div class="col-sm-9">
-                                <input type="text" id="inputToP" name="top" value="{{$product->top}}" class="form-control">
+                                <input type="text" id="inputToP" name="top" value="{{$product->top}}" class="ckd form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputTcp" class="col-sm-3">Target Customer Profile</label>
                               <div class="col-sm-9">
-                                <input type="text" id="inputTcp" name="tcp" value="{{$product->tcp}}" class="form-control">
+                                <input type="text" id="inputTcp" name="tcp" value="{{$product->tcp}}" class="ckd form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputTargetDoctors" class="col-sm-3">Target Doctors</label>
                               <div class="col-sm-9">
-                                <input type="text" id="inputTargetDoctors" name="target_doctors" value="{{$product->target_doctors}}" class="form-control">
+                                <input type="text" id="inputTargetDoctors" name="target_doctors" value="{{$product->target_doctors}}" class="ckd form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputPatientsProfile" class="col-sm-3">Patients Profile</label>
                               <div class="col-sm-9">
-                                <input type="text" id="inputPatientsProfile" name="patients_profile" value="{{$product->patients_profile}}" class="form-control">
+                                <input type="text" id="inputPatientsProfile" name="patients_profile" value="{{$product->patients_profile}}" class="ckd form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputCPA" class="col-sm-3">Customer Potential Analyser</label>
                               <div class="col-sm-9">
-                                <input type="text" id="inputCPA" name="cpa" value="{{$product->cpa}}" class="form-control">
+                                <input type="text" id="inputCPA" name="cpa" value="{{$product->cpa}}" class="ckd form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputOthers" class="col-sm-3">Others</label>
                               <div class="col-sm-9">
-                                <input type="text" id="inputOthers" name="others" value="{{$product->others}}" class="form-control">
+                                <input type="text" id="inputOthers" name="others" value="{{$product->others}}" class="ckd form-control">
                               </div>
                             </div>
                             <div class="form-group row">
@@ -151,9 +151,14 @@
           $('.select2').select2();
       });
 
-      // $(function () {
-      //   // Summernote
-      //   $('#inputDetails').summernote()  
-      // })
+      
+        $(".ckd").each(function () {
+          let id = $(this).attr('id');
+            CKEDITOR.replace(id, {
+              toolbar: [
+                ['Cut', 'Copy','Paste','PasteText','PasteFromWord','-','Textarea','Undo','Redo','-','Bold', 'Italic', 'Underline', 'Strike', 'TextColor', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink','Indent','Outdent','Blockquote','Styles','Format']
+              ]
+            });
+      });
   </script>
 @endsection

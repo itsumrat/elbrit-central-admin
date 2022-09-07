@@ -11,6 +11,7 @@ use App\Models\Employee;
 
 use App\Notifications\newProductsNotification;
 use App\Notifications\newRecordEditedNotification;
+use App\Notifications\OneSignalNotification;
 
 
 class ProductController extends Controller
@@ -49,11 +50,23 @@ class ProductController extends Controller
         $request->validate([
             'product_name' => 'required',
             'product_uniqueness' => 'required',
-            'carton_image' => 'image|max:5128',
-            'strip_image' => 'image|max:5128',
-            'tablet_image' => 'image|max:5128',
-            'logo_image' => 'image|max:5128',
+            // 'carton_image' => 'image|max:5128',
+            // 'strip_image' => 'image|max:5128',
+            // 'tablet_image' => 'image|max:5128',
+            // 'logo_image' => 'image|max:5128',
         ]);
+
+        if($request->hasFile('logo_image') || $request->hasFile('strip_image') || $request->hasFile('tablet_image') || $request->hasFile('carton_image')){
+
+        }else{
+
+            $request->validate([
+                'carton_image' => 'image|max:5128',
+                'strip_image' => 'image|max:5128',
+                'tablet_image' => 'image|max:5128',
+                'logo_image' => 'image|max:5128',
+            ]);
+        }
 
         $success = false;
         DB::beginTransaction();
@@ -91,7 +104,6 @@ class ProductController extends Controller
                 $success = true;
             }
         } catch (\Exception $e) {
-
         }
 
         if ($success) {
@@ -100,10 +112,23 @@ class ProductController extends Controller
             $notifyUsers = Employee::where(function($query) use ($request) {
                 return $query->whereIn('team_id', $request->team_ids);})
              ->get();
+
+             $payerIds = [];
     
              foreach($notifyUsers as $user){
+
+                if($user->player_id != null){
+                    $payerIds[] = $user->player_id;
+                }
+
                 $user->notify(new newProductsNotification($user));
             }
+           
+
+            OneSignalNotification::oneSignalData($payerIds, $request->product_name, 'new');
+            
+
+
     
             return redirect()->route('products.index')
                             ->with('success','Product Created successfully.');
@@ -220,9 +245,22 @@ class ProductController extends Controller
 
         if ($success) {
             DB::commit();
+
+            $payerIds = [];
+
             foreach($notifyUsers as $user){
+                if($user->player_id != null){
+                    $payerIds[] = $user->player_id;
+                }
+
                 $user->notify(new newRecordEditedNotification($msg));
             }
+
+            
+
+            OneSignalNotification::oneSignalData($payerIds, $request->product_name, 'update');
+            
+
             return redirect()->route('products.index')
                             ->with('success','Product Updated successfully.');
         } else {

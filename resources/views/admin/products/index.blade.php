@@ -73,13 +73,13 @@
                     <span class="badge badge-info">{{$team->name}}</span>
                   @endforeach
                 </td>
-                <td>{{$product->label_claim}}</td>                
-                <td>{{$product->top}}</td>
-                <td>{{$product->tcp}}</td>                
-                <td>{{$product->target_doctors}}</td>
-                <td>{{$product->patients_profile}}</td>                
-                <td>{{$product->cpa}}</td>
-                <td>{{$product->others}}</td>
+                <td>{!! $product->label_claim !!}</td>                
+                <td>{!! $product->top !!}</td>
+                <td>{!! $product->tcp !!}</td>                
+                <td>{!! $product->target_doctors !!}</td>
+                <td>{!! $product->patients_profile !!}</td>                
+                <td>{!! $product->cpa !!}</td>
+                <td>{!! $product->others !!}</td>
                 <td>
                   <li class="list-inline-item">
                     <a href="{{route('products.edit', $product->id)}}" class="btn btn-sm" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>

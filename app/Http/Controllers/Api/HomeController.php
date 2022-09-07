@@ -61,7 +61,7 @@ class HomeController extends Controller
 
     public function sendnotify($employee_id)
     {
-        $not[]=0;
+        $not = [];
         $user = Employee::has('notifications')->where('id', $employee_id)->first();
         if($user!=null){
             foreach ($user->notifications as $notification) {

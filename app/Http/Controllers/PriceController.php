@@ -11,6 +11,8 @@ use App\Notifications\newRecordEditedNotification;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Notification;
 
+use App\Notifications\OneSignalNotification;
+
 
 
 class PriceController extends Controller
@@ -55,8 +57,19 @@ class PriceController extends Controller
             return $query->whereIn('team_id', $request->team_ids);})
          ->get();
 
-         foreach($notifyUsers as $user){
+        
+        $payerIds = [];
+
+        foreach($notifyUsers as $user){
+            if($user->player_id != null){
+                $payerIds[] = $user->player_id;
+            }
             $user->notify(new newPriceNotification($user));
+        }
+
+        if(!empty($payerIds)){
+
+            OneSignalNotification::oneSignalData($payerIds, $request->product_name, 'new');
         }
 
 
@@ -112,9 +125,23 @@ class PriceController extends Controller
         $msg = [
             'post_name' => $request->product_name
         ];
+
+        $payerIds = [];
+
         foreach($notifyUsers as $user){
+            if($user->player_id != null){
+                $payerIds[] = $user->player_id;
+            }
             $user->notify(new newRecordEditedNotification($msg));
         }
+
+        if(!empty($payerIds)){
+
+            OneSignalNotification::oneSignalData($payerIds, $request->product_name, 'update');
+        }
+
+
+       
 
         if($price->update($request->all())) {
             $price->teams()->sync($request->team_ids);

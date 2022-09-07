@@ -13,6 +13,8 @@ use Response;
 
 use App\Notifications\newRecordNotification;
 use App\Notifications\newRecordEditedNotification;
+use App\Notifications\OneSignalNotification;
+
 
 class PostController extends Controller
 {
@@ -56,10 +58,8 @@ class PostController extends Controller
             // 'filenames.*' => 'mimes:doc,pdf,docx,zip',
             // 'image' => 'mimes:png',
             'image' => 'required',
-            'image.*' => 'image|mimes:jpeg'
+            'image.*' => 'image|mimes:jpeg,jpg,bmp,png'
         ]);
-
-
 
         $success = false;
         DB::beginTransaction();
@@ -111,30 +111,48 @@ class PostController extends Controller
         } catch (\Exception $e) {
 
         }
+            if ($success) {
+                DB::commit();
+                if($request->has('employee_ids')){
+                $notifyUsers = Employee::where(function($query) use ($request) {
+                    return $query->whereIn('id', $request->employee_ids)
+                    ->orWhere('team_id',$request->team_ids);
+                })
+                ->get();
+                
+            }
+            else
+            {
 
-        if ($success) {
-            DB::commit();
-            if($request->has('employee_ids')){
-            $notifyUsers = Employee::where(function($query) use ($request) {
-                return $query->whereIn('id', $request->employee_ids)
-                ->orWhere('team_id',$request->team_ids);
-            })
-            ->get();
-        }
-        else
-        {
-            $notifyUsers = Employee::where(function($query) use ($request) {
-                return $query->Where('team_id',$request->team_ids);
-            })
-            ->get();
-        }
+                $notifyUsers = Employee::where(function($query) use ($request) {
+                    return $query->Where('team_id',$request->team_ids);
+                })
+                ->get();
 
-        foreach($notifyUsers as $user){
-            $user->notify(new newRecordNotification($user));
-        }
-            return redirect()->route('posts.index')
-                            ->with('success','Post Created successfully.');
-        } else {
+
+            }
+
+            $payerIds = [];
+
+            foreach($notifyUsers as $user){
+                if($user->player_id != null){
+                    $payerIds[] = $user->player_id;
+                }
+                
+                $user->notify(new newRecordNotification($user));
+            }
+
+            
+
+            OneSignalNotification::oneSignalData($payerIds, $request->details, 'new');
+            
+
+
+            return redirect()->route('posts.index')->with('success','Post Created successfully.');
+
+
+        } 
+        else {
             DB::rollback();
             return redirect()->back()->withErrorMessage('Something went wrong');
         } 
@@ -235,11 +253,27 @@ class PostController extends Controller
 
         if ($success) {
             DB::commit();
+            
+
+            $payerIds = [];
+
             foreach($notifyUsers as $user){
+                if($user->player_id != null){
+                    $payerIds[] = $user->player_id;
+                }
+                
                 $user->notify(new newRecordEditedNotification($msg));
             }
+
+            if(!empty($payerIds)){
+
+                OneSignalNotification::oneSignalData($payerIds, $request->details, 'update');
+            }
+
             return redirect()->route('posts.index')
                             ->with('success','Post Updated successfully.');
+
+
         } else {
             DB::rollback();
             return redirect()->back()->withErrorMessage('Something went wrong');

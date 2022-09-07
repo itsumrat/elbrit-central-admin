@@ -50,7 +50,7 @@
             @foreach ($posts as $k => $post)
               <tr style="background-color:#fff">
                 <td>{{$k+1}}</td>
-                <td>{{$post->details}}</td>
+                <td>{!! $post->details !!}</td>
                 <td>
                   @foreach ($post->image as $image)
                     <img width="60" src="/uploads/{{$image}}" alt="">                    
