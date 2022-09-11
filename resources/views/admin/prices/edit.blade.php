@@ -95,6 +95,7 @@
   </div>
   <!-- /.content-wrapper -->
 @endsection
+
 @section('scripts')
 
 <script>
@@ -102,16 +103,5 @@
     $(document).ready(function() {
         $('.select2').select2();
     });
-
-    $(document).ready(function() {
-        $(".ckd").each(function () {
-        let id = $(this).attr('id');
-        CKEDITOR.replace(id, {
-        toolbar: [
-          ['Cut', 'Copy','Paste','PasteText','PasteFromWord','-','Textarea','Undo','Redo','-','Bold', 'Italic', 'Underline', 'Strike', 'TextColor', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink','Indent','Outdent','Blockquote','Styles','Format']
-        ]
-        });
-    });
-
 </script>
 @endsection

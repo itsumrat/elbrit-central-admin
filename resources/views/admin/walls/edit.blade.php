@@ -1,7 +1,11 @@
 @extends('admin.layout')
 
 @section('title', 'Update post')
-  
+
+@php
+  $fileData = $post->filenames;
+@endphp
+
 @section('content')
     <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -27,7 +31,6 @@
         </div>
     </div>
     @endif
-
     <div class="content"> 
         <div class="row">
             <div class="col-12">
@@ -80,6 +83,31 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                              <div class="offset-sm-3 col-sm-9">
+                                <div id="msnImagebox" class="msnImagebox">
+                                      <span id="close-btn" class="close-btn" onclick="uploadReset()">X</span>                            
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputfile" class="col-sm-3">Files</label>
+                              <div class="col-sm-9">
+                                <input type="file" id="inputFile" name="filenames[]" multiple class="form-control">
+                                <div class="form-group p-2 m-0">
+                                  
+                                  @if(count($fileData) > 0 )
+                                      @foreach ($fileData as $file)              
+                                        <img width="60" src="/uploads/{{$file}}">
+                                      @endforeach
+                                  @endif
+                                  
+                               
+                                </div>
+                              </div>
+                            </div>
+
                             <div class="form-group row">
                                 <label for="inputVideo" class="col-sm-3">Video</label>
                               <div class="col-sm-9">

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Arr;
 use Response;
 
 class HomeController extends Controller
@@ -19,18 +20,50 @@ class HomeController extends Controller
         return response()->json(['data' => $posts], 200);
     }
 
+
+    public function updateToken(Request $request){
+
+        Employee::where('id', $request->userId)->update(['player_id' => $request->player_id]);
+        return response()->json(['Success'],200);
+
+    }
+
     public function getPostsByEmployee($employee_id)
     {
-        $posts = Post::whereHas('teams', function($q) use ($employee_id){
-            $q->whereHas('employee', function($qu) use ($employee_id){
-                $qu->where('id', $employee_id);
-            });
-        })->orWherehas('employees', function($query) use ($employee_id){
-            $query->where('employee_id', $employee_id);
-        })->orderBy('pin_post', 'DESC')->get();
+        $data[] = Post::where('pin_post', 1)
+            ->whereHas('teams', function($q) use ($employee_id){
+                $q->whereHas('employee', function($qu) use ($employee_id){
+                    $qu->where('id', $employee_id);
+                });
+            })
+            ->orWherehas('employees', function($query) use ($employee_id){
+                $query->where('employee_id', $employee_id);
+            })
+            ->where('pin_post', 1)
+
+            ->orderBy('updated_at', 'DESC')
+
+        ->get();
+
+
+
+        $data[] = Post::where('pin_post', 0)
+            ->whereHas('teams', function($q) use ($employee_id){
+                $q->whereHas('employee', function($qu) use ($employee_id){
+                    $qu->where('id', $employee_id);
+                });
+            })
+            ->orWherehas('employees', function($query) use ($employee_id){
+                $query->where('employee_id', $employee_id);
+            })
+            ->where('pin_post', 0)
+            ->orderBy('updated_at', 'DESC')
+        ->get();
+
+        $posts = Arr::flatten($data);
 
  
-        return response()->json(['data' => $posts], 200);
+        return response()->json($posts, 200);
     }
 
     public function getPrices()

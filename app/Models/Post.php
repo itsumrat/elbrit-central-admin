@@ -19,6 +19,7 @@ class Post extends Model
         'published_at'
     ];
 
+
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'post_team', 'post_id', 'team_id')->with('employee');
